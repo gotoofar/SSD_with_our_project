@@ -1,5 +1,6 @@
 import torch
 import Config
+from visdom import Visdom       #  python -m visdom.server 启动
 if Config.use_cuda:
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
 if not Config.use_cuda:
@@ -76,6 +77,10 @@ def train():
     iter = 0
     step_index = 0
     before_epoch = -1
+
+    viz=Visdom()
+    viz.line([50.],[0],win='train_loss',opts=dict(title='train_loss'))
+    ii=1
     for epoch in range(1000):
         for step,(img,target) in enumerate(data_loader):
             if Config.use_cuda:
@@ -90,18 +95,20 @@ def train():
             loss.backward()
             optimizer.step()
             if iter % Config.print_iter == 0 or before_epoch!=epoch:
+                ii+=1
                 print('epoch : ',epoch,' iter : ',iter,' step : ',step,' loss : ',loss.item())
+                viz.line([loss.item()],[ii],win='train_loss',update='append')
                 before_epoch = epoch
             iter+=1
             if iter in Config.lr_steps:
                 step_index+=1
                 adjust_learning_rate(optimizer,Config.gamma,step_index)
             if iter % Config.save_iter == 0 and iter!=0:
-                torch.save(net.state_dict(), 'weights/ssd300_VOC_' +
+                torch.save(net.state_dict(), 'G:/git_folder/ssd_data_and_weight/data and weight/weights/ssd300_VOC_' +
                            repr(iter) + '.pth')
         if iter >= Config.max_iter:
             break
-    torch.save(net.state_dict(), 'weights/ssd_voc_last.pth')
+    torch.save(net.state_dict(), 'G:/git_folder/ssd_data_and_weight/data and weight/weights/ssd_voc_last.pth')
 
 if __name__ == '__main__':
     train()

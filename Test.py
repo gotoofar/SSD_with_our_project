@@ -21,8 +21,8 @@ output  显示一张检测结果的图像
 修改过后可以保存检测的结果
 '''
 
-checkpoint_path='G:/git_folder/ssd_pytorch-master/ssd_pytorch-master/weights/ssd300_VOC_800.pth'
-pic_path='G:/git_folder/ssd_pytorch-master/ssd_pytorch-master/test_img/7.jpg'
+checkpoint_path='G:/git_folder/ssd_data_and_weight/data and weight/weights/ssd300_VOC_800.pth'
+pic_path='G:/git_folder/ssd_data_and_weight/data and weight/test_img/7.jpg'
 
 #这个颜色是预设的Imagenet20类  如果检测的类比20少可以不改
 colors_tableau = [(255, 255, 255), (31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),
